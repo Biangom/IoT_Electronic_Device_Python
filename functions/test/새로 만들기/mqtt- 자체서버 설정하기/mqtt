@@ -1,0 +1,49 @@
+앞서 라즈베리파이3에 MQTT Broker인 Mosquitto를 설치해서 실행해 놓았다. 이제 파이썬으로 Publish와 Subscribe를 해보기로 하자. 파이썬에서 MQTT를 사용하기 위해서는 paho-mqtt라는 패키지를 설치해야 한다. 설치는 간단하다.
+
+$ pip install paho-mqtt
+
+파이썬 파일 mqtt_sub.py라는 이름으로 코드를 작성하고 저장한다.
+[출처] 파이썬으로 MQTT Publish/Sbuscribe Client 구현하기|작성자 코스모스
+
+
+#-*- coding:utf-8 -*-
+import paho.mqtt.client as mqtt
+
+#서버로부터 CONNTACK 응답을 받을 때 호출되는 콜백
+def on_connect(client, userdata, flags, rc):
+	print("Connected with result code "+str(rc))
+	#client.subscribe("$SYS/#")
+	client.subscribe("nodemcu") #구독 "nodemcu"
+
+#서버로부터 publish message를 받을 때 호출되는 콜백
+def on_message(client, userdata, msg):
+	print(msg.topic+" "+str(msg.payload)) #토픽과 메세지를 출력한다.
+
+client = mqtt.Client() #client 오브젝트 생성
+client.on_connect = on_connect #콜백설정
+client.on_message = on_message #콜백설정
+
+client.connect("raspberry_mqtt_broker_ipaddress", 1883, 60) #라즈베리파이3 MQTT 브로커에 연결
+client.loop_forever()
+[출처] 파이썬으로 MQTT Publish/Sbuscribe Client 구현하기|작성자 코스모스
+
+실행시켜 본다. 그리고 다른 기기에서 nodemcu라는 토픽으로 publish를 하면 메세지가 수신되는 것을 확인 할 수 있다. 토픽은 임의로 정한 것이다. 접속 서버의 모든 토픽을 받을려면 "#"라고 하면 되는것 같다.
+[출처] 파이썬으로 MQTT Publish/Sbuscribe Client 구현하기|작성자 코스모스
+
+다음에는 직접 publish하는 파일을 만들어 보자. 이번에는 mqtt_pub.py라는 이름으로 저장을 하자.
+[출처] 파이썬으로 MQTT Publish/Sbuscribe Client 구현하기|작성자 코스모스
+
+#-*- coding:utf-8 -*-
+import paho.mqtt.client as mqtt
+
+mqtt = mqtt.Client("python_pub") #Mqtt Client 오브젝트 생성
+mqtt.connect("broker_adress", 1883) #MQTT 서버에 연결
+
+mqtt.publish("nodemcu", "led") #토픽과 메세지 발행
+mqtt.publish("nodemcu", "led off")
+
+mqtt.loop(2) #timeout 2sec.
+[출처] 파이썬으로 MQTT Publish/Sbuscribe Client 구현하기|작성자 코스모스
+
+간단한 코드이다. 실제 쓸모있게 할려면 다른 요소들이 많이 들어가야 하지만 ... nodemcu라는 토픽으로 메세지를 발행하는 것이다. 그러면 이 토픽을 구독하는 다른 모든 기기에서 메세지를 받아 보게 된다.
+[출처] 파이썬으로 MQTT Publish/Sbuscribe Client 구현하기|작성자 코스모스

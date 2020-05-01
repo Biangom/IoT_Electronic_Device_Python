@@ -1,0 +1,22 @@
+import requests, sys
+import xml.etree.ElementTree as ET
+
+msg = "From python"
+phone = "PHONE_NUMBER" #To fill
+ip = "192.168.1.1" #Dongle ip
+
+#Get token
+r = requests.get("http://%s/api/webserver/token" % ip)
+root = ET.fromstring(r.content)
+token = root[0].text
+print "token", token
+
+#Send sms
+headers = { "__RequestVerificationToken": token, "Content-Type": "text/xml" }
+data = "<request><Index>-1</Index><Phones><Phone>%s</Phone></Phones><Sca/><Content>%s</Content><Length>%d</Length><Reserved>1</Reserved><Date>$TIME</Date></request>" % ( phone, msg, len(msg) )
+r = requests.post( "http://%s/api/sms/send-sms" % ip, data=data, headers=headers )
+print "send-sms", r.headers, r.content
+
+
+
+문자전송테스트 입니다.침입이 감지되었습니다,대처하시기 바랍니다(mqtt test)

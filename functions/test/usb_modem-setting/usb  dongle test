@@ -1,0 +1,122 @@
+
+
+Dialer Defaults]
+Init1 = ATZ
+Init2 = AT+CGDCONT=1,"IP","lte150.ktfwing.com","",0,0
+Modem Type = Analog Modem
+ISDN = 0
+Phone = *99#
+;Modem = /dev/ttyUSB0
+Modem = /dev/serial/by-id/usb-HUAWEI_HUAWEI_Mobile-if00-port0
+Username = 1
+Password = 1
+Baud = 115200
+New PPPD = yes
+Stupid Mode = 1
+
+
+
+라즈베리 파이(Raspberry Pi) USB 3G (E353s-2) 동글 연결하기
+프로필
+천동이
+2017. 5. 12. 19:50
+
+ 이웃추가본문 기타 기능
+화웨이 USB 3G 동글을 라즈베리 파이에서 동작 시켜봤다.
+
+화웨이 3G USB 동글(e353s-2)
+화웨이 USB 3G 동글(Dongle)이다.예전 모델들인 E173 또는 E1750보다도 성능이 살짝 좋은 것 같다. ...
+chandong83.blog.me
+
+
+1. 필요한 패키지 설치
+$ sudo apt-get update
+$ sudo apt-get install ppp usb-modeswitch wvdial
+$ sudo reboot
+
+2. Vendor ID와 Product ID 확인
+$ lsusb
+
+Bus 001 Device 013: ID 12d1:1506 Huawei Technologies Co., Ltd. Modem/Networkcard
+Bus 001 Device 011: ID 173d:0002 QSENN GP-K7000 keyboard
+Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp. SMSC9512/9514 Fast Ethernet Adapter
+Bus 001 Device 002: ID 0424:9514 Standard Microsystems Corp. SMC9514 Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+
+
+추가 사항이 있을 수 있음
+(usb_modesitwch)
+그냥 풀렸다;;;;;
+
+
+3. wvdial.conf 파일 수정
+$ sudo nano /etc/wvdial.conf
+[Dialer Defaults]
+Init1 = ATZ
+Init2 = AT+CGDCONT=1,"IP","lte150.ktfwing.com","",0,0
+Modem Type = Analog Modem
+ISDN = 0
+Phone = *99#
+;Modem = /dev/ttyUSB0
+Modem = /dev/serial/by-id/usb-HUAWEI_HUAWEI_Mobile-if00-port0
+Username = 1
+Password = 1
+Baud = 115200
+New PPPD = yes
+Stupid Mode = 1
+
+Modem은 USB 동글마다 차이가 있다.
+실제로는 ppp용 포트를 써주면 된다.
+Init2도 통신사마다 다르다.
+SK는 "lte.sktelecom.com"
+KT는 "lte150.ktfwing.com"
+
+4. wvdial 실행
+$ sudo wvdial&  # 데몬으로 실행
+
+
+
+5. ppp0 확인
+$ ifconfig ppp0
+
+
+6. ppp0 기본 라우터 추가
+#라우터 확인
+$ ip route show 
+or
+$ ip route list 
+
+$ sudo ip route add default via 10.64.64.64 #라우터 추가
+$ ip route show #확인
+
+
+
+7. 동작 테스트
+$ ping 8.8.8.8 -c 5   #5번만 실행
+$ ping google.com -c 5
+
+
+느리지만 와이파이 없이도 간단한 네트워크 통신이 가능해졌다.
+
+
+
+
+
+훌륭하다!!!
+http://chandong83.blog.me/221007222695
+
+
+
+
+참고 
+How to setup a USB 3G Modem on Raspberry PI using usb_modeswitch and wvdial | How To | The Fan Club | dynamic design solutions
+Submitted by The Fan Club on Tue, 2013-11-12 16:04 Setting up a USB 3G/4G modem on a Raspberry Pi is not a simple task. There are many guides available using the now defunct sakis3g script, but getting my modem to work required a bit more understanding.  The main problem is that most USB modems
+www.thefanclub.co.za
+ 
+Linux Set Up Routing with ip Command
+Learn about setting up Linux routing with ip command. Configuration example includes adding, deleting and setting default routes for given network interface under any Linux distributions.
+www.cyberciti.biz
+ 	
+리눅스(ubuntu)에서 HSDPA 모뎀(sk telecom t-login)사용
+

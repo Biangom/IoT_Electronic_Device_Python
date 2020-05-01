@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<!-- saved from url=(0102)https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial -->
+<html lang="en" dir="ltr" class="js"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<link rel="shortlink" href="https://www.thefanclub.co.za/node/164">
+<link rel="shortcut icon" href="https://www.thefanclub.co.za/sites/default/files/thefanclub-fan-128x128_0_0.png" type="image/png">
+<meta name="Generator" content="Drupal 7 (http://drupal.org)">
+<link rel="canonical" href="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="MobileOptimized" content="width">
+<meta name="HandheldFriendly" content="true">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>How to setup a USB 3G Modem on Raspberry PI using usb_modeswitch and wvdial | How To | The Fan Club  | dynamic design solutions</title>
+<link type="text/css" rel="stylesheet" href="./3g-sms_files/css_xE-rWrJf-fncB6ztZfd2huxqgxu4WO-qwma6Xer30m4.css" media="all">
+<link type="text/css" rel="stylesheet" href="./3g-sms_files/css_wnzJFgwEPexjpojSZh38hzCVj2pJ1XYvu9WNlyWxDPo.css" media="all">
+<link type="text/css" rel="stylesheet" href="./3g-sms_files/css" media="all">
+<link type="text/css" rel="stylesheet" href="./3g-sms_files/css_UiBpcOGvEZ5pomiZMazD7CturKzjwNC8Z_RvEaQuf4I.css" media="all">
+<link type="text/css" rel="stylesheet" href="./3g-sms_files/css_WkIQlS2V8h4Vh16HARhGTGX8u2nA_FzvuTZ5-DXLwaQ.css" media="screen">
+<link type="text/css" rel="stylesheet" href="./3g-sms_files/css_z32lq1_efA3R0lxg2oFwy0nwglR_FGymxNBTyjlc1Fc.css" media="all">
+<link type="text/css" rel="stylesheet" href="./3g-sms_files/css_0-HQcBqZTpt_gdHiNLqSFt2pl51Ol2GaapdYJR0EHzg.css" media="print">
+<link type="text/css" rel="stylesheet" href="./3g-sms_files/css_47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU.css" media="all">
+<link type="text/css" rel="stylesheet" href="./3g-sms_files/css_qUTeUiaivmUSLW3VkLQHh4aEZzDTFStUIlYm8us0DUA.css" media="only screen">
+<link type="text/css" rel="stylesheet" href="./3g-sms_files/css_Aqtn7cboBO5TWlIYi6ZbpdutT6ABNndU_cR2AMm_d_M.css" media="screen">
+<link type="text/css" rel="stylesheet" href="./3g-sms_files/css_ulg_JoHrSecVeglQGg5xxW3xkQ1G6nnOLc7OjB_GWvM.css" media="only screen">
+
+<!--[if lt IE 9]>
+<link type="text/css" rel="stylesheet" href="https://www.thefanclub.co.za/sites/default/files/css/css_qqR4wi_Wv6cXuFVvhfh4_cb8wJyBtNo2g_8h_BwLm78.css" media="screen" />
+<![endif]-->
+<script async="" src="https://www.thefanclub.co.za/sites/default/files/googleanalytics/analytics.js?pi6jw1"></script><script>window.google_analytics_uacct = "UA-6164882-2";</script>
+<script src="./3g-sms_files/jquery.js"></script><style></style>
+<script src="./3g-sms_files/jquery.once.js"></script>
+<script src="./3g-sms_files/drupal.js"></script>
+<script src="./3g-sms_files/ace.js"></script><style id="ace_editor.css">.ace_editor {position: relative;overflow: hidden;font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;direction: ltr;}.ace_scroller {position: absolute;overflow: hidden;top: 0;bottom: 0;background-color: inherit;-ms-user-select: none;-moz-user-select: none;-webkit-user-select: none;user-select: none;cursor: text;}.ace_content {position: absolute;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;min-width: 100%;}.ace_dragging .ace_scroller:before{position: absolute;top: 0;left: 0;right: 0;bottom: 0;content: '';background: rgba(250, 250, 250, 0.01);z-index: 1000;}.ace_dragging.ace_dark .ace_scroller:before{background: rgba(0, 0, 0, 0.01);}.ace_selecting, .ace_selecting * {cursor: text !important;}.ace_gutter {position: absolute;overflow : hidden;width: auto;top: 0;bottom: 0;left: 0;cursor: default;z-index: 4;-ms-user-select: none;-moz-user-select: none;-webkit-user-select: none;user-select: none;}.ace_gutter-active-line {position: absolute;left: 0;right: 0;}.ace_scroller.ace_scroll-left {box-shadow: 17px 0 16px -16px rgba(0, 0, 0, 0.4) inset;}.ace_gutter-cell {padding-left: 19px;padding-right: 6px;background-repeat: no-repeat;}.ace_gutter-cell.ace_error {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABOFBMVEX/////////QRswFAb/Ui4wFAYwFAYwFAaWGAfDRymzOSH/PxswFAb/SiUwFAYwFAbUPRvjQiDllog5HhHdRybsTi3/Tyv9Tir+Syj/UC3////XurebMBIwFAb/RSHbPx/gUzfdwL3kzMivKBAwFAbbvbnhPx66NhowFAYwFAaZJg8wFAaxKBDZurf/RB6mMxb/SCMwFAYwFAbxQB3+RB4wFAb/Qhy4Oh+4QifbNRcwFAYwFAYwFAb/QRzdNhgwFAYwFAbav7v/Uy7oaE68MBK5LxLewr/r2NXewLswFAaxJw4wFAbkPRy2PyYwFAaxKhLm1tMwFAazPiQwFAaUGAb/QBrfOx3bvrv/VC/maE4wFAbRPBq6MRO8Qynew8Dp2tjfwb0wFAbx6eju5+by6uns4uH9/f36+vr/GkHjAAAAYnRSTlMAGt+64rnWu/bo8eAA4InH3+DwoN7j4eLi4xP99Nfg4+b+/u9B/eDs1MD1mO7+4PHg2MXa347g7vDizMLN4eG+Pv7i5evs/v79yu7S3/DV7/498Yv24eH+4ufQ3Ozu/v7+y13sRqwAAADLSURBVHjaZc/XDsFgGIBhtDrshlitmk2IrbHFqL2pvXf/+78DPokj7+Fz9qpU/9UXJIlhmPaTaQ6QPaz0mm+5gwkgovcV6GZzd5JtCQwgsxoHOvJO15kleRLAnMgHFIESUEPmawB9ngmelTtipwwfASilxOLyiV5UVUyVAfbG0cCPHig+GBkzAENHS0AstVF6bacZIOzgLmxsHbt2OecNgJC83JERmePUYq8ARGkJx6XtFsdddBQgZE2nPR6CICZhawjA4Fb/chv+399kfR+MMMDGOQAAAABJRU5ErkJggg==");background-repeat: no-repeat;background-position: 2px center;}.ace_gutter-cell.ace_warning {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAmVBMVEX///8AAAD///8AAAAAAABPSzb/5sAAAAB/blH/73z/ulkAAAAAAAD85pkAAAAAAAACAgP/vGz/rkDerGbGrV7/pkQICAf////e0IsAAAD/oED/qTvhrnUAAAD/yHD/njcAAADuv2r/nz//oTj/p064oGf/zHAAAAA9Nir/tFIAAAD/tlTiuWf/tkIAAACynXEAAAAAAAAtIRW7zBpBAAAAM3RSTlMAABR1m7RXO8Ln31Z36zT+neXe5OzooRDfn+TZ4p3h2hTf4t3k3ucyrN1K5+Xaks52Sfs9CXgrAAAAjklEQVR42o3PbQ+CIBQFYEwboPhSYgoYunIqqLn6/z8uYdH8Vmdnu9vz4WwXgN/xTPRD2+sgOcZjsge/whXZgUaYYvT8QnuJaUrjrHUQreGczuEafQCO/SJTufTbroWsPgsllVhq3wJEk2jUSzX3CUEDJC84707djRc5MTAQxoLgupWRwW6UB5fS++NV8AbOZgnsC7BpEAAAAABJRU5ErkJggg==");background-position: 2px center;}.ace_gutter-cell.ace_info {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAJ0Uk5TAAB2k804AAAAPklEQVQY02NgIB68QuO3tiLznjAwpKTgNyDbMegwisCHZUETUZV0ZqOquBpXj2rtnpSJT1AEnnRmL2OgGgAAIKkRQap2htgAAAAASUVORK5CYII=");background-position: 2px center;}.ace_dark .ace_gutter-cell.ace_info {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAJFBMVEUAAAChoaGAgIAqKiq+vr6tra1ZWVmUlJSbm5s8PDxubm56enrdgzg3AAAAAXRSTlMAQObYZgAAAClJREFUeNpjYMAPdsMYHegyJZFQBlsUlMFVCWUYKkAZMxZAGdxlDMQBAG+TBP4B6RyJAAAAAElFTkSuQmCC");}.ace_scrollbar {position: absolute;right: 0;bottom: 0;z-index: 6;}.ace_scrollbar-inner {position: absolute;cursor: text;left: 0;top: 0;}.ace_scrollbar-v{overflow-x: hidden;overflow-y: scroll;top: 0;}.ace_scrollbar-h {overflow-x: scroll;overflow-y: hidden;left: 0;}.ace_print-margin {position: absolute;height: 100%;}.ace_text-input {position: absolute;z-index: 0;width: 0.5em;height: 1em;opacity: 0;background: transparent;-moz-appearance: none;appearance: none;border: none;resize: none;outline: none;overflow: hidden;font: inherit;padding: 0 1px;margin: 0 -1px;text-indent: -1em;-ms-user-select: text;-moz-user-select: text;-webkit-user-select: text;user-select: text;white-space: pre!important;}.ace_text-input.ace_composition {background: inherit;color: inherit;z-index: 1000;opacity: 1;text-indent: 0;}.ace_layer {z-index: 1;position: absolute;overflow: hidden;word-wrap: normal;white-space: pre;height: 100%;width: 100%;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;pointer-events: none;}.ace_gutter-layer {position: relative;width: auto;text-align: right;pointer-events: auto;}.ace_text-layer {font: inherit !important;}.ace_cjk {display: inline-block;text-align: center;}.ace_cursor-layer {z-index: 4;}.ace_cursor {z-index: 4;position: absolute;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;border-left: 2px solid;transform: translatez(0);}.ace_slim-cursors .ace_cursor {border-left-width: 1px;}.ace_overwrite-cursors .ace_cursor {border-left-width: 0;border-bottom: 1px solid;}.ace_hidden-cursors .ace_cursor {opacity: 0.2;}.ace_smooth-blinking .ace_cursor {-webkit-transition: opacity 0.18s;transition: opacity 0.18s;}.ace_editor.ace_multiselect .ace_cursor {border-left-width: 1px;}.ace_marker-layer .ace_step, .ace_marker-layer .ace_stack {position: absolute;z-index: 3;}.ace_marker-layer .ace_selection {position: absolute;z-index: 5;}.ace_marker-layer .ace_bracket {position: absolute;z-index: 6;}.ace_marker-layer .ace_active-line {position: absolute;z-index: 2;}.ace_marker-layer .ace_selected-word {position: absolute;z-index: 4;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;}.ace_line .ace_fold {-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;display: inline-block;height: 11px;margin-top: -2px;vertical-align: middle;background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAJCAYAAADU6McMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJpJREFUeNpi/P//PwOlgAXGYGRklAVSokD8GmjwY1wasKljQpYACtpCFeADcHVQfQyMQAwzwAZI3wJKvCLkfKBaMSClBlR7BOQikCFGQEErIH0VqkabiGCAqwUadAzZJRxQr/0gwiXIal8zQQPnNVTgJ1TdawL0T5gBIP1MUJNhBv2HKoQHHjqNrA4WO4zY0glyNKLT2KIfIMAAQsdgGiXvgnYAAAAASUVORK5CYII="),url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA3CAYAAADNNiA5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACJJREFUeNpi+P//fxgTAwPDBxDxD078RSX+YeEyDFMCIMAAI3INmXiwf2YAAAAASUVORK5CYII=");background-repeat: no-repeat, repeat-x;background-position: center center, top left;color: transparent;border: 1px solid black;border-radius: 2px;cursor: pointer;pointer-events: auto;}.ace_dark .ace_fold {}.ace_fold:hover{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAJCAYAAADU6McMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJpJREFUeNpi/P//PwOlgAXGYGRklAVSokD8GmjwY1wasKljQpYACtpCFeADcHVQfQyMQAwzwAZI3wJKvCLkfKBaMSClBlR7BOQikCFGQEErIH0VqkabiGCAqwUadAzZJRxQr/0gwiXIal8zQQPnNVTgJ1TdawL0T5gBIP1MUJNhBv2HKoQHHjqNrA4WO4zY0glyNKLT2KIfIMAAQsdgGiXvgnYAAAAASUVORK5CYII="),url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA3CAYAAADNNiA5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACBJREFUeNpi+P//fz4TAwPDZxDxD5X4i5fLMEwJgAADAEPVDbjNw87ZAAAAAElFTkSuQmCC");}.ace_tooltip {background-color: #FFF;background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.1));background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));border: 1px solid gray;border-radius: 1px;box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);color: black;max-width: 100%;padding: 3px 4px;position: fixed;z-index: 999999;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;cursor: default;white-space: pre;word-wrap: break-word;line-height: normal;font-style: normal;font-weight: normal;letter-spacing: normal;pointer-events: none;}.ace_folding-enabled > .ace_gutter-cell {padding-right: 13px;}.ace_fold-widget {-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;margin: 0 -12px 0 1px;display: none;width: 11px;vertical-align: top;background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAANElEQVR42mWKsQ0AMAzC8ixLlrzQjzmBiEjp0A6WwBCSPgKAXoLkqSot7nN3yMwR7pZ32NzpKkVoDBUxKAAAAABJRU5ErkJggg==");background-repeat: no-repeat;background-position: center;border-radius: 3px;border: 1px solid transparent;cursor: pointer;}.ace_folding-enabled .ace_fold-widget {display: inline-block;   }.ace_fold-widget.ace_end {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAANElEQVR42m3HwQkAMAhD0YzsRchFKI7sAikeWkrxwScEB0nh5e7KTPWimZki4tYfVbX+MNl4pyZXejUO1QAAAABJRU5ErkJggg==");}.ace_fold-widget.ace_closed {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAGCAYAAAAG5SQMAAAAOUlEQVR42jXKwQkAMAgDwKwqKD4EwQ26sSOkVWjgIIHAzPiCgaqiqnJHZnKICBERHN194O5b9vbLuAVRL+l0YWnZAAAAAElFTkSuQmCCXA==");}.ace_fold-widget:hover {border: 1px solid rgba(0, 0, 0, 0.3);background-color: rgba(255, 255, 255, 0.2);box-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);}.ace_fold-widget:active {border: 1px solid rgba(0, 0, 0, 0.4);background-color: rgba(0, 0, 0, 0.05);box-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);}.ace_dark .ace_fold-widget {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHklEQVQIW2P4//8/AzoGEQ7oGCaLLAhWiSwB146BAQCSTPYocqT0AAAAAElFTkSuQmCC");}.ace_dark .ace_fold-widget.ace_end {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAH0lEQVQIW2P4//8/AxQ7wNjIAjDMgC4AxjCVKBirIAAF0kz2rlhxpAAAAABJRU5ErkJggg==");}.ace_dark .ace_fold-widget.ace_closed {background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAFCAYAAACAcVaiAAAAHElEQVQIW2P4//+/AxAzgDADlOOAznHAKgPWAwARji8UIDTfQQAAAABJRU5ErkJggg==");}.ace_dark .ace_fold-widget:hover {box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);background-color: rgba(255, 255, 255, 0.1);}.ace_dark .ace_fold-widget:active {box-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);}.ace_fold-widget.ace_invalid {background-color: #FFB4B4;border-color: #DE5555;}.ace_fade-fold-widgets .ace_fold-widget {-webkit-transition: opacity 0.4s ease 0.05s;transition: opacity 0.4s ease 0.05s;opacity: 0;}.ace_fade-fold-widgets:hover .ace_fold-widget {-webkit-transition: opacity 0.05s ease 0.05s;transition: opacity 0.05s ease 0.05s;opacity:1;}.ace_underline {text-decoration: underline;}.ace_bold {font-weight: bold;}.ace_nobold .ace_bold {font-weight: normal;}.ace_italic {font-style: italic;}.ace_error-marker {background-color: rgba(255, 0, 0,0.2);position: absolute;z-index: 9;}.ace_highlight-marker {background-color: rgba(255, 255, 0,0.2);position: absolute;z-index: 8;}.ace_br1 {border-top-left-radius    : 3px;}.ace_br2 {border-top-right-radius   : 3px;}.ace_br3 {border-top-left-radius    : 3px; border-top-right-radius:    3px;}.ace_br4 {border-bottom-right-radius: 3px;}.ace_br5 {border-top-left-radius    : 3px; border-bottom-right-radius: 3px;}.ace_br6 {border-top-right-radius   : 3px; border-bottom-right-radius: 3px;}.ace_br7 {border-top-left-radius    : 3px; border-top-right-radius:    3px; border-bottom-right-radius: 3px;}.ace_br8 {border-bottom-left-radius : 3px;}.ace_br9 {border-top-left-radius    : 3px; border-bottom-left-radius:  3px;}.ace_br10{border-top-right-radius   : 3px; border-bottom-left-radius:  3px;}.ace_br11{border-top-left-radius    : 3px; border-top-right-radius:    3px; border-bottom-left-radius:  3px;}.ace_br12{border-bottom-right-radius: 3px; border-bottom-left-radius:  3px;}.ace_br13{border-top-left-radius    : 3px; border-bottom-right-radius: 3px; border-bottom-left-radius:  3px;}.ace_br14{border-top-right-radius   : 3px; border-bottom-right-radius: 3px; border-bottom-left-radius:  3px;}.ace_br15{border-top-left-radius    : 3px; border-top-right-radius:    3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px;}
+/*# sourceURL=ace/css/ace_editor.css */</style><style id="ace-tm">.ace-tm .ace_gutter {background: #f0f0f0;color: #333;}.ace-tm .ace_print-margin {width: 1px;background: #e8e8e8;}.ace-tm .ace_fold {background-color: #6B72E6;}.ace-tm {background-color: #FFFFFF;color: black;}.ace-tm .ace_cursor {color: black;}.ace-tm .ace_invisible {color: rgb(191, 191, 191);}.ace-tm .ace_storage,.ace-tm .ace_keyword {color: blue;}.ace-tm .ace_constant {color: rgb(197, 6, 11);}.ace-tm .ace_constant.ace_buildin {color: rgb(88, 72, 246);}.ace-tm .ace_constant.ace_language {color: rgb(88, 92, 246);}.ace-tm .ace_constant.ace_library {color: rgb(6, 150, 14);}.ace-tm .ace_invalid {background-color: rgba(255, 0, 0, 0.1);color: red;}.ace-tm .ace_support.ace_function {color: rgb(60, 76, 114);}.ace-tm .ace_support.ace_constant {color: rgb(6, 150, 14);}.ace-tm .ace_support.ace_type,.ace-tm .ace_support.ace_class {color: rgb(109, 121, 222);}.ace-tm .ace_keyword.ace_operator {color: rgb(104, 118, 135);}.ace-tm .ace_string {color: rgb(3, 106, 7);}.ace-tm .ace_comment {color: rgb(76, 136, 107);}.ace-tm .ace_comment.ace_doc {color: rgb(0, 102, 255);}.ace-tm .ace_comment.ace_doc.ace_tag {color: rgb(128, 159, 191);}.ace-tm .ace_constant.ace_numeric {color: rgb(0, 0, 205);}.ace-tm .ace_variable {color: rgb(49, 132, 149);}.ace-tm .ace_xml-pe {color: rgb(104, 104, 91);}.ace-tm .ace_entity.ace_name.ace_function {color: #0000A2;}.ace-tm .ace_heading {color: rgb(12, 7, 255);}.ace-tm .ace_list {color:rgb(185, 6, 144);}.ace-tm .ace_meta.ace_tag {color:rgb(0, 22, 142);}.ace-tm .ace_string.ace_regex {color: rgb(255, 0, 0)}.ace-tm .ace_marker-layer .ace_selection {background: rgb(181, 213, 255);}.ace-tm.ace_multiselect .ace_selection.ace_start {box-shadow: 0 0 3px 0px white;}.ace-tm .ace_marker-layer .ace_step {background: rgb(252, 255, 0);}.ace-tm .ace_marker-layer .ace_stack {background: rgb(164, 229, 101);}.ace-tm .ace_marker-layer .ace_bracket {margin: -1px 0 0 -1px;border: 1px solid rgb(192, 192, 192);}.ace-tm .ace_marker-layer .ace_active-line {background: rgba(0, 0, 0, 0.07);}.ace-tm .ace_gutter-active-line {background-color : #dcdcdc;}.ace-tm .ace_marker-layer .ace_selected-word {background: rgb(250, 250, 255);border: 1px solid rgb(200, 200, 250);}.ace-tm .ace_indent-guide {background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==") right repeat-y;}
+/*# sourceURL=ace/css/ace-tm */</style><style>    .error_widget_wrapper {        background: inherit;        color: inherit;        border:none    }    .error_widget {        border-top: solid 2px;        border-bottom: solid 2px;        margin: 5px 0;        padding: 10px 40px;        white-space: pre-wrap;    }    .error_widget.ace_error, .error_widget_arrow.ace_error{        border-color: #ff5a5a    }    .error_widget.ace_warning, .error_widget_arrow.ace_warning{        border-color: #F1D817    }    .error_widget.ace_info, .error_widget_arrow.ace_info{        border-color: #5a5a5a    }    .error_widget.ace_ok, .error_widget_arrow.ace_ok{        border-color: #5aaa5a    }    .error_widget_arrow {        position: absolute;        border: solid 5px;        border-top-color: transparent!important;        border-right-color: transparent!important;        border-left-color: transparent!important;        top: -5px;    }</style>
+<script src="./3g-sms_files/ext-language_tools.js"></script><style>.ace_snippet-marker {    -moz-box-sizing: border-box;    box-sizing: border-box;    background: rgba(194, 193, 208, 0.09);    border: 1px dotted rgba(211, 208, 235, 0.62);    position: absolute;}</style><style>.ace_editor.ace_autocomplete .ace_marker-layer .ace_active-line {    background-color: #CAD6FA;    z-index: 1;}.ace_editor.ace_autocomplete .ace_line-hover {    border: 1px solid #abbffe;    margin-top: -1px;    background: rgba(233,233,253,0.4);}.ace_editor.ace_autocomplete .ace_line-hover {    position: absolute;    z-index: 2;}.ace_editor.ace_autocomplete .ace_scroller {   background: none;   border: none;   box-shadow: none;}.ace_rightAlignedText {    color: gray;    display: inline-block;    position: absolute;    right: 4px;    text-align: right;    z-index: -1;}.ace_editor.ace_autocomplete .ace_completion-highlight{    color: #000;    text-shadow: 0 0 0.01em;}.ace_editor.ace_autocomplete {    width: 280px;    z-index: 200000;    background: #fbfbfb;    color: #444;    border: 1px lightgray solid;    position: fixed;    box-shadow: 2px 3px 5px rgba(0,0,0,.2);    line-height: 1.4;}</style>
+<script src="./3g-sms_files/jquery.cookie.js"></script>
+<script src="./3g-sms_files/jquery.form.js"></script>
+<script src="./3g-sms_files/ajax.js"></script>
+<script src="./3g-sms_files/jquery_update.js"></script>
+<script src="./3g-sms_files/ideal_comments.js"></script>
+<script src="./3g-sms_files/uc_file.js"></script>
+<script src="./3g-sms_files/ace_editor.js"></script>
+<script src="./3g-sms_files/theme-chrome.js"></script>
+<script src="./3g-sms_files/mode-sh.js"></script>
+<script src="./3g-sms_files/jquery.backstretch.min.js"></script>
+<script src="./3g-sms_files/backstretch.js"></script>
+<script src="https://www.thefanclub.co.za/sites/all/modules/google_analytics/googleanalytics.js?pi6jw1"></script>
+<script>(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://www.thefanclub.co.za/sites/default/files/googleanalytics/analytics.js?pi6jw1","ga");ga("create", "UA-6164882-2", {"cookieDomain":"auto"});ga("send", "pageview");</script>
+<script src="./3g-sms_files/textarea.js"></script>
+<script src="./3g-sms_files/progress.js"></script>
+<script src="./3g-sms_files/jquery.hoverIntent.minified.js"></script>
+<script src="./3g-sms_files/sfsmallscreen.js"></script>
+<script src="./3g-sms_files/supposition.js"></script>
+<script src="./3g-sms_files/superfish.js"></script>
+<script src="./3g-sms_files/supersubs.js"></script>
+<script src="./3g-sms_files/superfish(1).js"></script>
+<script src="./3g-sms_files/scripts.js"></script>
+<script src="./3g-sms_files/scalefix.js"></script>
+<script>jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","ajaxPageState":{"theme":"sky","theme_token":"ZgEIpo3S-1L5E_l2QtpISny_CyJcEiG9gGeWB1y4ivY","jquery_version":"default","js":{"0":1,"misc\/jquery.js":1,"misc\/jquery.once.js":1,"misc\/drupal.js":1,"sites\/all\/libraries\/ace\/src\/ace.js":1,"sites\/all\/libraries\/ace\/src\/ext-language_tools.js":1,"misc\/jquery.cookie.js":1,"misc\/jquery.form.js":1,"misc\/ajax.js":1,"sites\/all\/modules\/jquery_update\/js\/jquery_update.js":1,"sites\/all\/modules\/ideal_comments\/theme\/ideal_comments.js":1,"sites\/all\/modules\/ubercart\/uc_file\/uc_file.js":1,"sites\/all\/modules\/ace_editor\/js\/ace_editor.js":1,"sites\/all\/libraries\/ace\/src\/theme-chrome.js":1,"sites\/all\/libraries\/ace\/src\/mode-sh.js":1,"sites\/all\/modules\/backstretch\/js\/jquery.backstretch.min.js":1,"sites\/all\/modules\/backstretch\/js\/backstretch.js":1,"sites\/all\/modules\/google_analytics\/googleanalytics.js":1,"1":1,"misc\/textarea.js":1,"misc\/progress.js":1,"sites\/all\/libraries\/superfish\/jquery.hoverIntent.minified.js":1,"sites\/all\/libraries\/superfish\/sfsmallscreen.js":1,"sites\/all\/libraries\/superfish\/supposition.js":1,"sites\/all\/libraries\/superfish\/superfish.js":1,"sites\/all\/libraries\/superfish\/supersubs.js":1,"sites\/all\/modules\/superfish\/superfish.js":1,"sites\/all\/themes\/sky\/js\/scripts.js":1,"sites\/all\/themes\/adaptivetheme\/adaptivetheme\/at_core\/scripts\/scalefix.js":1},"css":{"modules\/system\/system.base.css":1,"modules\/system\/system.menus.css":1,"modules\/system\/system.messages.css":1,"modules\/system\/system.theme.css":1,"sites\/all\/modules\/simplenews\/simplenews.css":1,"modules\/comment\/comment.css":1,"sites\/all\/modules\/date\/date_api\/date.css":1,"sites\/all\/modules\/date\/date_popup\/themes\/datepicker.1.7.css":1,"modules\/field\/theme\/field.css":1,"sites\/all\/modules\/ideal_comments\/theme\/ideal_comments.css":1,"modules\/node\/node.css":1,"modules\/poll\/poll.css":1,"modules\/search\/search.css":1,"sites\/all\/modules\/ubercart\/uc_file\/uc_file.css":1,"sites\/all\/modules\/ubercart\/uc_order\/uc_order.css":1,"sites\/all\/modules\/ubercart\/uc_product\/uc_product.css":1,"sites\/all\/modules\/ubercart\/uc_store\/uc_store.css":1,"modules\/user\/user.css":1,"sites\/all\/modules\/views\/css\/views.css":1,"sites\/all\/modules\/ckeditor\/css\/ckeditor.css":1,"https:\/\/fonts.googleapis.com\/css?family=Ubuntu\u0026subset=latin-ext":1,"sites\/all\/modules\/ctools\/css\/ctools.css":1,"sites\/all\/modules\/panels\/css\/panels.css":1,"sites\/all\/modules\/ace_editor\/styles\/ace_editor.css":1,"public:\/\/honeypot\/honeypot.css":1,"sites\/all\/libraries\/superfish\/css\/superfish.css":1,"sites\/all\/libraries\/superfish\/style\/space.css":1,"sites\/all\/themes\/adaptivetheme\/adaptivetheme\/at_core\/css\/at.settings.style.headings.css":1,"sites\/all\/themes\/adaptivetheme\/adaptivetheme\/at_core\/css\/at.settings.style.image.css":1,"sites\/all\/themes\/adaptivetheme\/adaptivetheme\/at_core\/css\/at.layout.css":1,"sites\/all\/themes\/sky\/css\/html-elements.css":1,"sites\/all\/themes\/sky\/css\/forms.css":1,"sites\/all\/themes\/sky\/css\/tables.css":1,"sites\/all\/themes\/sky\/css\/page.css":1,"sites\/all\/themes\/sky\/css\/articles.css":1,"sites\/all\/themes\/sky\/css\/comments.css":1,"sites\/all\/themes\/sky\/css\/fields.css":1,"sites\/all\/themes\/sky\/css\/blocks.css":1,"sites\/all\/themes\/sky\/css\/navigation.css":1,"sites\/all\/themes\/sky\/color\/colors.css":1,"sites\/all\/themes\/sky\/css\/sky.settings.style.css":1,"sites\/all\/themes\/sky\/css\/print.css":1,"public:\/\/google_fonts.css":1,"public:\/\/adaptivetheme\/sky_files\/sky.responsive.layout.css":1,"public:\/\/adaptivetheme\/sky_files\/sky.fonts.css":1,"public:\/\/adaptivetheme\/sky_files\/sky.responsive.styles.css":1,"public:\/\/adaptivetheme\/sky_files\/sky.lt-ie9.layout.css":1}},"ace_editor":{"editor_instances":[{"id":"ace-editor-inline0","content":"#!\/bin\/sh\n# Mobile Broadband Startup Service script v0.1 alpha by The Fan Club - April 2012\n# acts as startup service script for nmcli to fire up Mobile Broadband Connections\n# NOTE: Use the name of the Mobile Connection in the Network Manager as the \u0027id\u0027 \n# USAGE: start|stop|status\n#\n### BEGIN INIT INFO \n# Provides: mobile-broadband-connect \n# Required-Start: $remote_fs $syslog\n# Required-Stop: $remote_fs $syslog\n# Should-Start: $network\n# Should-Stop: $network\n# Default-Start: 3 4 5 \n# Default-Stop: 0 1 6 \n# Short-Description: Autoconnect 3G GSM\n### END INIT INFO\n\nNAME=\u0022mobile-broadband-connect\u0022\nDESC=\u0022Autoconnect 3G\/4G GSM USB modem at startup\u0022\n\ntest -x $DAEMON || exit 0\n\ncase \u0022$1\u0022 in\n\tstart)\n\t   echo \u0022Starting Mobile Broadband Connection.\u0022\n\n\t   while true; do\n \t      # testing...\n\t      LC_ALL=C nmcli -t -f TYPE,STATE dev | grep -q \u0022^gsm:disconnected$\u0022\n\t      if [ $? -eq 0 ]; then\n\t         break\n \t      else\n\t         # no GSM modem detected yet, sleeping for a second\n\t         sleep 1\n \t      fi\n\t   done\n\n\t   # Once GSM modem detected, run the script\n\t   nmcli -t con up id YourMobileBroadbandConnectionNameHere\n\t;;\n\tstop)\n\t   echo \u0022Stopping Mobile Broadband Connection.\u0022\n\t   nmcli -t con down id YourMobileBroadbandConnectionNameHere\n\t   nmcli -t nm wwan off \n\t;;\n\tstatus)\n\t   # Check to see if the process is running with nmcli\n       nmcli -p dev\n\t;;\n\t\n\t*)\n\t   echo \u0022Mobile Broadband Startup Service\u0022\n\t   echo $\u0022Usage: $0 {start|stop|status}\u0022\n\t   exit 1\nesac\nexit 0","settings":{"autocomplete":false,"autowrap":true,"font_size":"11pt","height":"500px","invisibles":false,"line_numbers":1,"linehighlighting":1,"print_margin":false,"syntax":"sh","tabsize":"2","theme":"chrome","width":"100%"}},{"id":"ace-editor-inline1","content":"#!\/bin\/sh\n# CD Mobile Broadband Startup Service script v2.0 beta by CD May 2012\n# acts as startup service script for nmcli to fire up Mobile Broadband Connections\n# user the name of the Mobile Connection as defined in the Network Manager as the \u0027id\u0027 \n# USAGE: start|stop|status\n#\n### BEGIN INIT INFO \n# Provides: mobile-broadband-connect \n# Required-Start: $remote_fs $syslog\n# Required-Stop: $remote_fs $syslog\n# Should-Start: $network\n# Should-Stop: $network\n# Default-Start: 3 4 5 \n# Default-Stop: 0 1 6 \n# Short-Description: Autoconnect 3G GSM\n### END INIT INFO\n\nNAME=\u0022mobile-broadband-connect\u0022\nDESC=\u0022Autoconnect 3G\/4G GSM USB modem at startup\u0022\n\ntest -x $DAEMON || exit 0\n\ncase \u0022$1\u0022 in\n\tstart)\n\t   echo \u0022[MBC] *** Starting Mobile Broadband Connection.\u0022  \n\t   while true; do\n \t      # Waiting for GSM modem adaptor...\n          LC_ALL=C nmcli -t -f TYPE,STATE dev | grep -q \u0022^gsm:disconnected$\u0022\n          if [ $? -eq 0 ]; then \t \n\t         # now gsm detected, run the script\n             echo \u0022[MBC] GSM Modem Detected - attempting auto connect\u0022 \n\t\t     nmcli -t con up id YourMobileBroadbandConnectionNameHere\n\t         echo \u0022[MBC] GSM Modem connecting .....\u0022\n             # we want the script to loop forever and \n             # check if the connection is down\n             # but we need to give it a chance to connect or \n             # the modem will attempt to connect in an endless loop so we \n             # give a 30 second break to make sure it is not connected\t\n\t         echo \u0022[MBC] Hopefully connected now... sleeping for 30sec\u0022            \n\t         sleep 30\n\t      else\n\t         # GSM device not detected yet or GMS device already connected - sleep \n\t         echo \u0022[MBC] MBC still running - sleeping for 10.....\u0022 \n\t         sleep 10\n \t      fi\n       done\n\t;;\n\tstop)  \n       echo \u0022[MBC] Stopping Mobile Broadband Connection.\u0022  \n       nmcli -t con down id YourMobileBroadbandConnectionNameHere\n       ps aux | grep \u0022mobile-connection-connect-2.0.sh start\u0022 | grep -v grep | awk \u0027{print $2}\u0027 | xargs kill -9\n       #nmcli -t nm wwan off \n\t;;\n\tstatus)\n       # Check network status with nmcli \n       nmcli -p dev\n\t;;\n\t\n\t*)\n\t   echo \u0022[MBC] Mobile Broadband Startup Service\u0022\n       echo $\u0022Usage: $0 {start|stop|status}\u0022\n       exit 1\nesac\nexit 0","settings":{"autocomplete":false,"autowrap":true,"font_size":"11pt","height":"500px","invisibles":false,"line_numbers":1,"linehighlighting":1,"print_margin":false,"syntax":"sh","tabsize":"2","theme":"chrome","width":"100%"}}]},"backstretch":{"node-142":{"duration":"30000","items":["https:\/\/www.thefanclub.co.za\/sites\/default\/files\/styles\/wallpaper-watermark\/public\/wallpaper\/fan-04-edit.jpg?itok=86EWPu-R"]}},"googleanalytics":{"trackOutbound":1,"trackMailto":1,"trackDownload":1,"trackDownloadExtensions":"7z|aac|arc|arj|asf|asx|avi|bin|csv|doc|exe|flv|gif|gz|gzip|hqx|jar|jpe?g|js|mp(2|3|4|e?g)|mov(ie)?|msi|msp|pdf|phps|png|ppt|qtm?|ra(m|r)?|sea|sit|tar|tgz|torrent|txt|wav|wma|wmv|wpd|xls|xml|z|zip|deb"},"urlIsAjaxTrusted":{"\/search\/node":true,"\/how-to\/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial":true,"\/system\/ajax":true},"comments_fold":"3","ajax":{"edit-preview":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164617","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--2":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164618","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--3":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164626","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--4":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164627","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--5":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164640","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--6":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164641","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--7":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164683","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--8":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164684","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--9":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164711","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--10":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164712","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--11":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164770","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--12":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164771","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--13":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164804","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--14":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164805","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--15":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164806","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--16":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164807","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--17":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164812","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--18":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164813","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--19":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164851","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--20":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_164853","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}},"edit-preview--21":{"callback":"_preview_ajax_callback","wrapper":"replace_preview_comment_form_node_howto_1641086","event":"mousedown","keypress":true,"prevent":"click","url":"\/system\/ajax","submit":{"_triggering_element_name":"op","_triggering_element_value":"Preview"}}},"superfish":{"5":{"id":"5","sf":{"animation":{"opacity":"show","height":"show"},"speed":"\u0027fast\u0027","autoArrows":true,"dropShadows":true,"disableHI":false},"plugins":{"smallscreen":{"mode":"window_width","addSelected":false,"menuClasses":false,"hyperlinkClasses":false,"title":"Bottom Menu"},"supposition":true,"bgiframe":false,"supersubs":{"minWidth":"12","maxWidth":"27","extraWidth":1}}}},"adaptivetheme":{"sky":{"layout_settings":{"bigscreen":"three-col-grail","tablet_landscape":"three-col-grail","tablet_portrait":"one-col-stack","smalltouch_landscape":"one-col-stack","smalltouch_portrait":"one-col-stack"},"media_query_settings":{"bigscreen":"only screen and (min-width:1025px)","tablet_landscape":"only screen and (min-width:769px) and (max-width:1024px)","tablet_portrait":"only screen and (min-width:481px) and (max-width:768px)","smalltouch_landscape":"only screen and (min-width:321px) and (max-width:480px)","smalltouch_portrait":"only screen and (max-width:320px)"}}}});</script>
+<!--[if lt IE 9]>
+<script src="https://www.thefanclub.co.za/sites/all/themes/adaptivetheme/adaptivetheme/at_core/scripts/html5.js?pi6jw1"></script>
+<![endif]-->
+</head>
+<body class="html not-front not-logged-in one-sidebar sidebar-second page-node page-node- page-node-164 node-type-howto atr-7.x-3.x atv-7.x-3.0-rc1+2-dev site-name-the-fan-club- section-how-to color-scheme-custom sky bs-n bb-n mb-dd mbp-l rc-6 rct-6">
+  <div id="skip-link" class="nocontent">
+    <a href="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial#main-content" class="element-invisible element-focusable">Skip to main content</a>
+  </div>
+    <div id="page" class="container page snc-uc snw-n sna-l sns-n ssc-n ssw-n ssa-l sss-n btc-n btw-b bta-l bts-n ntc-n ntw-n nta-l nts-n ctc-n ctw-b cta-l cts-n ptc-n ptw-n pta-l pts-n with-footer">
+
+  
+  <header id="header" class="clearfix" role="banner">
+              <!-- start: Branding -->
+      <div id="branding" class="branding-elements clearfix">
+
+        
+                  <!-- start: Site name and Slogan hgroup -->
+          <hgroup id="name-and-slogan" class="h-group">
+
+                          <h1 id="site-name"><a href="https://www.thefanclub.co.za/" title="Home page">The Fan Club </a></h1>
+            
+                          <h2 id="site-slogan">dynamic design solutions</h2>
+            
+          </hgroup><!-- /end #name-and-slogan -->
+
+        
+      </div><!-- /end #branding -->
+    
+    <div class="region region-header"><div class="region-inner clearfix"><div id="block-search-form" class="block block-search no-title odd first last block-count-1 block-region-header block-form" role="search"><div class="block-inner clearfix">  
+  
+  <div class="block-content content no-title"><form action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="search-block-form" accept-charset="UTF-8"><div><div class="container-inline">
+      <h2 class="element-invisible">Search form</h2>
+    <div class="form-item form-type-textfield form-item-search-block-form">
+  <label class="element-invisible" for="edit-search-block-form--2">Search </label>
+ <input title="Enter the terms you wish to search for." type="search" id="edit-search-block-form--2" name="search_block_form" value="" size="15" maxlength="128" class="form-text">
+</div>
+<div class="form-actions form-wrapper" id="edit-actions"><input type="submit" id="edit-submit" name="op" value="Search" class="form-submit"></div><input type="hidden" name="form_build_id" value="form-Wzdse4BVpZgrUNX63ukPKp8xoqj-yo0kexcbtZ0ACHE">
+<input type="hidden" name="form_id" value="search_block_form">
+</div>
+</div></form></div>
+  </div></div></div></div>    <div id="menu-bar" class="nav clearfix"><h2 class="menu-toggle"><a href="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial#">Menu</a></h2><nav id="block-system-main-menu" class="block block-system block-menu menu-wrapper menu-bar-wrapper clearfix odd first last block-count-2 block-region-menu-bar block-main-menu" role="navigation">  
+      <h2 class="element-invisible block-title element-invisible">Main menu</h2>
+  
+  <ul class="menu clearfix"><li class="first leaf menu-depth-1 menu-item-5998"><a href="https://www.thefanclub.co.za/" title="Home Page">home</a></li><li class="leaf menu-depth-1 menu-item-3148"><a href="https://www.thefanclub.co.za/content/about-us" title="About The Fan Club">about</a></li><li class="leaf menu-depth-1 menu-item-389"><a href="https://www.thefanclub.co.za/projects" title="The Fan Club Web Design and Development Projects">projects</a></li><li class="leaf menu-depth-1 menu-item-3393"><a href="https://www.thefanclub.co.za/experiments" title="How To Experiments with Ubuntu, Drupal and other open source projects">experiments</a></li><li class="leaf menu-depth-1 menu-item-5076"><a href="https://www.thefanclub.co.za/software-selection" title="The Fan Club Ubuntu Software Selection">software</a></li><li class="last leaf menu-depth-1 menu-item-401"><a href="https://www.thefanclub.co.za/contact" title="Contact The Fan Club">contact </a></li></ul>
+  </nav></div>
+  </header>
+
+  <div id="columns" class="no-menu-bar">
+    <div class="columns-inner clearfix">
+
+                  
+      
+      
+      <div id="content-column">
+        <div class="content-inner">
+
+          
+          <section id="main-content" role="main">
+
+                                      <header id="main-content-header">
+
+                                  <h1 id="page-title">
+                    How to setup a USB 3G Modem on Raspberry PI using usb_modeswitch and wvdial                  </h1>
+                
+                
+              </header>
+                        
+            <!-- region: Main Content -->
+                          <div id="content">
+                <div id="block-system-main" class="block block-system no-title odd first last block-count-3 block-region-content block-main">  
+  
+  <article id="node-164" class="node node-howto node-promoted article odd node-full ia-r clearfix" role="article">
+
+  
+  
+      <header class="node-header">
+
+      
+      
+              <div class="submitted">Submitted by <span class="username">The Fan Club</span> on <time datetime="2013-11-12T16:04:13+0200" pubdate="pubdate">Tue, 2013-11-12 16:04</time></div>
+      
+    </header>
+  
+  
+  <div class="node-content">
+  <div class="field field-name-field-image-howto field-type-image field-label-hidden view-mode-full"><div class="field-items"><figure class="clearfix field-item even"><img class="image-style-300-wide" src="./3g-sms_files/debian.png" width="250" height="250" alt=""></figure></div></div><div class="field field-name-body field-type-text-with-summary field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even"><p>Setting up a USB 3G/4G modem on a Raspberry Pi is not a simple task. There are many guides available using the now defunct <strong>sakis3g</strong> script, but getting my modem to work required a bit more understanding.&nbsp;</p>
+<p>The main problem is that most USB modems act as two devices - a USB storage device and a USB modem. When plugged in to the Raspberry PI the device is usually in USB storage mode. There is a program called <strong>usb_modeswitch</strong> that we can use to do the switching&nbsp;</p>
+<p>The other missing part is a way to connect to the cellular network with the USB modem from the Raspberry. For this we will use the classic <strong>ppp</strong> and&nbsp;<strong>wvdial</strong> programs.</p>
+<p><span style="font-size:1.35em;">Requirements</span></p>
+<ul>
+<li>
+		Raspberry PI computer</li>
+<li>
+		Raspbian OS installed</li>
+<li>
+		USB 3G Modem</li>
+<li>
+		5V 1A power supply for the Raspberry PI&nbsp;</li>
+</ul>
+<hr>
+<h2>
+	1. Install required software</h2>
+<ul>
+<li>
+		Connect your Raspberry PI to the internet via LAN or Wifi</li>
+<li>
+		Open a terminal window and enter:</li>
+</ul>
+<pre><span style="font-size:14px;">sudo apt-get update
+sudo apt-get install ppp usb-modeswitch wvdial</span></pre><h2>
+	2. Get the USB switching codes</h2>
+<ul>
+<li>
+		We need to get the codes of the USB device in USB storage mode and USB modem mode.&nbsp;</li>
+<li>
+		Connect your USB modem and reboot the Raspberry PI without LAN or Wifi connection</li>
+<li>
+		Once rebooted open a terminal window and enter:</li>
+</ul>
+<pre><span style="font-size:14px;">lsusb
+</span></pre><ul>
+<li>
+		The output will look similar to the screenshot below. Your modem should be listed as one of the USB devices. Note the numbers underlined. These are the device vendor and product codes.</li>
+</ul>
+<p><img alt="" src="./3g-sms_files/lsusb-01.png"></p>
+<ul>
+<li>
+		Make a note of these numbers. In this case it is <strong>19d2:<span style="background-color:#ffff00;">2000</span></strong></li>
+<li>
+		This value will later be used in the <strong>DefaultProduct</strong> value&nbsp;</li>
+<li>
+		Then we need to soft reboot the Rapberry PI with the modem connected.</li>
+<li>
+		Open a terminal window and enter:</li>
+</ul>
+<pre><span style="font-size:14px;">sudo reboot</span></pre><ul>
+<li>
+		Once rebooted open a terminal window and enter:</li>
+</ul>
+<pre><span style="font-size:14px;">lsusb
+</span></pre><ul>
+<li>
+		The output will look similar to the screenshot below. Your modem should be listed and if you are lucky the second set of numbers would have changed. This is usb_modeswitch doing it's job and switching the device to USB modem mode.</li>
+</ul>
+<p><img alt="" src="./3g-sms_files/lsusb-02.png"></p>
+<ul>
+<li>
+		Make a note of the new numbers. In this case it is <strong>19d2:<span style="background-color:#ffff00;">2002</span></strong></li>
+<li>
+		This value will be used later in the <b>TargetProduct </b>value<b>&nbsp;</b></li>
+</ul>
+<h2>
+	3. Create custom usb_modeswitch config file</h2>
+<ul>
+<li>
+		We need to create a custom config file for usb_modeswitch on the Raspberry PI because on a cold boot the device is not always active yet when usb_modeswitch runs on startup and the device is left in USB storage mode.</li>
+<li>
+		We will extract some more information for our usb_modeswitch config file so that we can do the switching manually.</li>
+<li>
+		Open a terminal window and enter the following replacing the codes <strong>19d2</strong> and <strong>2000</strong> with the codes you noted in step 2. Also note the added backslash.</li>
+</ul>
+<pre><span style="font-size:14px;">cd /tmp
+tar -xzvf /usr/share/usb_modeswitch/configPack.tar.gz <strong>19d2</strong><span style="background-color:#ffff00;">\</span>:<strong>2000</strong>
+</span></pre><ul>
+<li>
+		Now open the extracted file with a text editor like leafpad replacing the codes noted in step 2.</li>
+</ul>
+<pre><span style="font-size:14px;">leafpad <strong>19d2</strong>:<strong>2000</strong>
+</span></pre><ul>
+<li>
+		The content of the file should look something similar to the screenshot below.</li>
+<li>
+		The parts we are interested in are shown in blue.</li>
+</ul>
+<p><img alt="" src="./3g-sms_files/usb_modeswitch-01.png"></p>
+<ul>
+<li>
+		Now open the<strong> /etc/usb_modeswitch.conf </strong>file and add the information obtained above to the file.</li>
+<li>
+		Open a terminal window and enter:</li>
+</ul>
+<pre><span style="font-size:14px;">sudo leafpad /etc/usb_modeswitch.conf</span></pre><ul>
+<li>
+		Then add the following replacing the codes and MessageContent values with those of your device and save.</li>
+</ul>
+<pre><span style="font-size:14px;">DefaultVendor=0x<strong>19d2</strong>
+<span style="background-color:#ffff00;">DefaultProduct</span>=0x<strong>2000</strong>
+
+TargetVendor=0x<strong>19d2</strong>
+<span style="background-color:#ffff00;">TargetProduct</span>=0x<strong>2002</strong>
+
+MessageContent="5553424312345678000000000000061e000000000000000000000000000000"
+MessageContent2="5553424312345679000000000000061b000000020000000000000000000000"
+MessageContent3="55534243123456702000000080000c85010101180101010101000000000000"</span></pre><h2>
+	4. Create the wvdial config file</h2>
+<ul>
+<li>
+		The next step is to create a config file for wvdial so you can connect to your service provider.</li>
+<li>
+		Open a terminal window and enter:</li>
+</ul>
+<pre><span style="font-size:14px;">sudo leafpad /etc/wvdial.conf</span></pre><ul>
+<li>
+		Replace the content of the file with the following.&nbsp;</li>
+</ul>
+<pre><span style="font-size:14px;">[Dialer 3gconnect]</span>
+<span style="font-size:14px;">Init1 = ATZ</span>
+<span style="font-size:14px;">Init2 = ATQ0 V1 E1 S0=0 &amp;C1 &amp;D2 +FCLASS=0</span>
+<span style="font-size:14px;"><strong>Init3</strong> = AT+CGDCONT=1,"IP","<span style="background-color:#ffff00;">internet</span>"</span>
+<span style="font-size:14px;">Stupid Mode = 1</span>
+<span style="font-size:14px;">Modem Type = Analog Modem</span>
+<span style="font-size:14px;">ISDN = 0</span>
+<span style="font-size:14px;"><strong>Phone</strong> = <span style="background-color:#ffff00;">*99#</span></span>
+<span style="font-size:14px;">Modem = /dev/gsmmodem</span>
+<span style="font-size:14px;"><strong>Username</strong> = { }</span>
+<span style="font-size:14px;"><strong>Password</strong> = { }</span>
+<span style="font-size:14px;">Baud = 460800</span></pre><ul>
+<li>
+		Replace <span style="background-color:#ffff00;">internet</span> with your service provider's <strong>APN</strong></li>
+<li>
+		Replace the <strong>Phone</strong> number if you need to dial a different code to connect.</li>
+<li>
+		Replace <strong>Username</strong> and <strong>Password</strong> if needed. To leave the username and password as blank use { }</li>
+</ul>
+<h2>
+	5. Connect to the internet</h2>
+<ul>
+<li>
+		To connect we need to make sure the device is in modem mode.&nbsp;</li>
+<li>
+		Open a terminal and enter:</li>
+</ul>
+<pre><span style="font-size:14px;">sudo usb_modeswitch -c /etc/usb_modeswitch.conf</span></pre><ul>
+<li>
+		Then connect to the internet with:</li>
+</ul>
+<pre><span style="font-size:14px;">wvdial 3gconnect</span></pre><p>&nbsp;</p>
+</div></div></div><section class="field field-name-field-tags-howto field-type-taxonomy-term-reference field-label-above view-mode-full"><h2 class="field-label">Tags:&nbsp;</h2><ul class="field-items"><li class="field-item even"><a href="https://www.thefanclub.co.za/category/howto/raspberry-pi">Raspberry Pi</a></li><li class="field-item odd"><a href="https://www.thefanclub.co.za/category/howto/raspbian">Raspbian</a></li><li class="field-item even"><a href="https://www.thefanclub.co.za/category/howto/3g">3G</a></li><li class="field-item odd"><a href="https://www.thefanclub.co.za/category/howto/usb-3g-modem">USB 3G Modem</a></li><li class="field-item even"><a href="https://www.thefanclub.co.za/category/howto/wvdial">wvdial</a></li><li class="field-item odd"><a href="https://www.thefanclub.co.za/category/howto/usbmodeswitch">usb_modeswitch</a></li><li class="field-item even"><a href="https://www.thefanclub.co.za/category/howto/gsm">GSM</a></li><li class="field-item odd"><a href="https://www.thefanclub.co.za/category/howto/mobile-broadband">Mobile Broadband</a></li><li class="field-item even"><a href="https://www.thefanclub.co.za/category/howto/networking">Networking</a></li></ul></section>  </div>
+
+      <nav class="clearfix"><ul class="links inline"><li class="statistics_counter first last"><span>493020 reads</span></li></ul></nav>
+  
+  <section id="comments" class="comment-wrapper jquery-once-1-processed">
+
+          <h2 class="comment-title title">Comments</h2>
+      
+  <a id="comment-617"></a>
+<article class="comment comment-by-anonymous odd first clearfix">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/617#comment-617" rel="bookmark">Hi. Is there any way to</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">bogdan (not verified)</span> on <time datetime="2013-11-23T21:58:50Z" pubdate="pubdate"><span class="date-time">Sat, 2013-11-23 21:58</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">Hi. Is there any way to forward ports (22 in my case) on a 3g usb dongle (Huawei e3131) connected to the USB of an RaspberyPi. I want remote access to the shell of the Raspbery.</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name">Your name </label>
+ <input type="text" id="edit-name" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject">Subject </label>
+ <input type="text" id="edit-subject" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body"><div id="comment-body-add-more-wrapper"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-6gnKtQzpzDU6NzwhSkpxf0Fk4hUdTEk3y5p0Dn0ZhM4">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164617">
+<div class="form-actions form-wrapper" id="edit-actions--2"><input type="submit" id="edit-submit--3" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164617" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-618"></a>
+<article class="comment comment-by-node-author even clearfix">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/618#comment-618" rel="bookmark">If your service provider</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">The Fan Club</span> on <time datetime="2013-11-23T23:19:15Z" pubdate="pubdate"><span class="date-time">Sat, 2013-11-23 23:19</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">If your service provider allows your 3G USB modem a public IP you can access ssh directly with the IP. You will need a DDNS service like Duck DNS to point a domain name to the IP of the 3G modem as the public IP of the modem will change.</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--2" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--2">Your name </label>
+ <input type="text" id="edit-name--2" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--2">Subject </label>
+ <input type="text" id="edit-subject--2" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--2"><div id="comment-body-add-more-wrapper--2"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--2">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--2" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-FAAXBrB0pln50TeN2TNcTedsdP8qfjo3XJjVk9LE16s">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164618">
+<div class="form-actions form-wrapper" id="edit-actions--3"><input type="submit" id="edit-submit--4" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--2" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--2">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--2" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164618" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--2" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-626"></a>
+<article class="comment comment-by-anonymous odd clearfix">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/626#comment-626" rel="bookmark">Hi, can this method be</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">Khingcat (not verified)</span> on <time datetime="2013-12-03T04:48:07Z" pubdate="pubdate"><span class="date-time">Tue, 2013-12-03 04:48</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">Hi, can this method be applied for EVDO USB modem? Thank you.</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--3" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--3">Your name </label>
+ <input type="text" id="edit-name--3" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--3">Subject </label>
+ <input type="text" id="edit-subject--3" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--3"><div id="comment-body-add-more-wrapper--3"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--3">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--3" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-HGoCzwAN6FOUi5eRXXnkHu-f3RwkBArdFXdqtPyNkwA">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164626">
+<div class="form-actions form-wrapper" id="edit-actions--4"><input type="submit" id="edit-submit--5" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--3" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--3">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--3" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164626" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--3" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-627"></a>
+<article class="comment comment-by-node-author even clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/627#comment-627" rel="bookmark">EVDO is just another 3G</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">The Fan Club</span> on <time datetime="2013-12-03T10:48:16Z" pubdate="pubdate"><span class="date-time">Tue, 2013-12-03 10:48</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">EVDO is just another 3G standard like HSPA - depending on the modem it should work. Let us know.</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--4" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--4">Your name </label>
+ <input type="text" id="edit-name--4" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--4">Subject </label>
+ <input type="text" id="edit-subject--4" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--4"><div id="comment-body-add-more-wrapper--4"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--4">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--4" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-13o43JjiauwNk-T2twKGmyaMNwbz5aanS3dWptQwhUI">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164627">
+<div class="form-actions form-wrapper" id="edit-actions--5"><input type="submit" id="edit-submit--6" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--4" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--4">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--4" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164627" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--4" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-640"></a>
+<article class="comment comment-by-anonymous odd clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/640#comment-640" rel="bookmark">I'm planning to use Wifi or</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">hendfu (not verified)</span> on <time datetime="2013-12-08T08:46:10Z" pubdate="pubdate"><span class="date-time">Sun, 2013-12-08 08:46</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">I'm planning to use Wifi or LAN as main internet connection and USB 3G modem for sending SMS using gammu, but also able to switch to USB modem for internet connection if wifi or LAN failed. Do you think it's possible?</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--5" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--5">Your name </label>
+ <input type="text" id="edit-name--5" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--5">Subject </label>
+ <input type="text" id="edit-subject--5" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--5"><div id="comment-body-add-more-wrapper--5"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--5">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--5" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-cdCD0thtPYXnmH7ZtTMHLTYV_62V5PEiub7bm1-c_ls">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164640">
+<div class="form-actions form-wrapper" id="edit-actions--6"><input type="submit" id="edit-submit--7" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--5" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--5">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--5" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164640" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--5" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-641"></a>
+<article class="comment comment-by-node-author even clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/641#comment-641" rel="bookmark">Yes it is. Almost anything is</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">The Fan Club</span> on <time datetime="2013-12-08T10:42:30Z" pubdate="pubdate"><span class="date-time">Sun, 2013-12-08 10:42</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">Yes it is. Almost anything is possible with linux</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--6" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--6">Your name </label>
+ <input type="text" id="edit-name--6" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--6">Subject </label>
+ <input type="text" id="edit-subject--6" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--6"><div id="comment-body-add-more-wrapper--6"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--6">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--6" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-IqAoYhBNfqtn3Hk7PLvQskRtiuFcp9Mx0Ay-cVlhc3k">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164641">
+<div class="form-actions form-wrapper" id="edit-actions--7"><input type="submit" id="edit-submit--8" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--6" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--6">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--6" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164641" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--6" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-683"></a>
+<article class="comment comment-by-anonymous odd clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/683#comment-683" rel="bookmark">E: Unable to locate package</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">aliks bright (not verified)</span> on <time datetime="2013-12-28T23:28:53Z" pubdate="pubdate"><span class="date-time">Sat, 2013-12-28 23:28</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">  E: Unable to locate package usb_modeswitch
+
+Correct :
+
+  sudo apt-get install ppp usb-modeswitch wvdial 
+</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--7" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--7">Your name </label>
+ <input type="text" id="edit-name--7" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--7">Subject </label>
+ <input type="text" id="edit-subject--7" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--7"><div id="comment-body-add-more-wrapper--7"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--7">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--7" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-xXEtmCGRAFwVw9mmJEZqU8RbL-Bnk80_tTFwDIrK1KY">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164683">
+<div class="form-actions form-wrapper" id="edit-actions--8"><input type="submit" id="edit-submit--9" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--7" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--7">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--7" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164683" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--7" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-684"></a>
+<article class="comment comment-by-node-author even clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/684#comment-684" rel="bookmark">Corrected the instructions -</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">The Fan Club</span> on <time datetime="2013-12-29T09:38:02Z" pubdate="pubdate"><span class="date-time">Sun, 2013-12-29 09:38</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">Corrected the instructions - thank you</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--8" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--8">Your name </label>
+ <input type="text" id="edit-name--8" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--8">Subject </label>
+ <input type="text" id="edit-subject--8" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--8"><div id="comment-body-add-more-wrapper--8"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--8">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--8" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-xJn3mbgJmv277UqxafYFVta_93pvbhSlHzu52UrdrTI">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164684">
+<div class="form-actions form-wrapper" id="edit-actions--9"><input type="submit" id="edit-submit--10" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--8" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--8">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--8" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164684" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--8" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-711"></a>
+<article class="comment comment-by-anonymous odd clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/711#comment-711" rel="bookmark">Thanks for the tutorial - it</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">Jono (not verified)</span> on <time datetime="2014-01-13T21:00:04Z" pubdate="pubdate"><span class="date-time">Mon, 2014-01-13 21:00</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">Thanks for the tutorial - it's certainly the best information source out there!
+
+I managed to get most of the way there, but now have the following error:
+
+...
+CONNECT
+--&gt; Carrier detected.  Starting PPP immediately.
+--&gt; Unable to run /usr/sbin/pppd.
+--&gt; Check permissions, or specify a "PPPD Path" option in wvdial.conf.
+
+I've tried to chown, and chmod the appropriate files, but doesn't seem to work.
+
+Thanks!</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--9" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--9">Your name </label>
+ <input type="text" id="edit-name--9" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--9">Subject </label>
+ <input type="text" id="edit-subject--9" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--9"><div id="comment-body-add-more-wrapper--9"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--9">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--9" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-NebL3DNWo5SpkYBkStgdSkO4ZTw9I0u6FS1IjGGnVZs">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164711">
+<div class="form-actions form-wrapper" id="edit-actions--10"><input type="submit" id="edit-submit--11" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--9" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--9">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--9" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164711" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--9" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-712"></a>
+<article class="comment comment-by-node-author even clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/712#comment-712" rel="bookmark">The permissions on /usr/sbin</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">The Fan Club</span> on <time datetime="2014-01-13T22:24:14Z" pubdate="pubdate"><span class="date-time">Mon, 2014-01-13 22:24</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">The permissions on /usr/sbin/pppd should not be changed. You can re-install ppp and try again, or use sudo wvdial 3gconnect . </div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--10" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--10">Your name </label>
+ <input type="text" id="edit-name--10" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--10">Subject </label>
+ <input type="text" id="edit-subject--10" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--10"><div id="comment-body-add-more-wrapper--10"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--10">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--10" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-eTqMMxt2frP5PK3UlQ4xMDSkGfy6CUN2fxCtun8G8JY">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164712">
+<div class="form-actions form-wrapper" id="edit-actions--11"><input type="submit" id="edit-submit--12" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--10" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--10">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--10" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164712" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--10" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-770"></a>
+<article class="comment comment-by-anonymous odd clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/770#comment-770" rel="bookmark">unable to locate wvidal</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">kyle (not verified)</span> on <time datetime="2014-02-10T00:59:03Z" pubdate="pubdate"><span class="date-time">Mon, 2014-02-10 00:59</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">What do I do if im unable to locate package wvidal?
+</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--11" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--11">Your name </label>
+ <input type="text" id="edit-name--11" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--11">Subject </label>
+ <input type="text" id="edit-subject--11" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--11"><div id="comment-body-add-more-wrapper--11"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--11">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--11" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-e7fToLGDTeC9hOHypbxsScD2gduFmsi6RYDkDFbjgG4">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164770">
+<div class="form-actions form-wrapper" id="edit-actions--12"><input type="submit" id="edit-submit--13" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--11" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--11">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--11" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164770" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--11" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-771"></a>
+<article class="comment comment-by-node-author even clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/771#comment-771" rel="bookmark">unable to locate wvidal</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">The Fan Club</span> on <time datetime="2014-02-10T09:40:17Z" pubdate="pubdate"><span class="date-time">Mon, 2014-02-10 09:40</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">Hi Kyle - check you spelling - it is wvdial NOT wvidal</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--12" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--12">Your name </label>
+ <input type="text" id="edit-name--12" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--12">Subject </label>
+ <input type="text" id="edit-subject--12" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--12"><div id="comment-body-add-more-wrapper--12"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--12">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--12" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-S-T5ZNANzMzKTyT86V65bCEtnAeXBBVoDg78N5CzTFc">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164771">
+<div class="form-actions form-wrapper" id="edit-actions--13"><input type="submit" id="edit-submit--14" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--12" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--12">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--12" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164771" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--12" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-804"></a>
+<article class="comment comment-by-anonymous odd clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/804#comment-804" rel="bookmark">Use to send sms instead?</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">Andrew (not verified)</span> on <time datetime="2014-02-26T20:34:52Z" pubdate="pubdate"><span class="date-time">Wed, 2014-02-26 20:34</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">Hi! I'm trying to send an SMS from my pi using a huawei e3131 dongle and I was wondering what changes I would need to make to the wvdial.conf file so that when I execute it, instead of connecting the dongle to 3G it just connects so that I can send an sms instead?
+Thank you!</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--13" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--13">Your name </label>
+ <input type="text" id="edit-name--13" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--13">Subject </label>
+ <input type="text" id="edit-subject--13" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--13"><div id="comment-body-add-more-wrapper--13"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--13">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--13" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-8H2qyP38FO02RjwRhVuMoCrIV7fyBOStGVNAbFrK4qA">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164804">
+<div class="form-actions form-wrapper" id="edit-actions--14"><input type="submit" id="edit-submit--15" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--13" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--13">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--13" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164804" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--13" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-805"></a>
+<article class="comment comment-by-node-author even clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/805#comment-805" rel="bookmark">SMS </a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">The Fan Club</span> on <time datetime="2014-02-27T16:52:00Z" pubdate="pubdate"><span class="date-time">Thu, 2014-02-27 16:52</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">Hi Andrew. Look at using Gammu for sending sms's, you do not need to connect to the 3G network with wvdial, just make sure the modem is in 3G mode. </div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--14" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--14">Your name </label>
+ <input type="text" id="edit-name--14" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--14">Subject </label>
+ <input type="text" id="edit-subject--14" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--14"><div id="comment-body-add-more-wrapper--14"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--14">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--14" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-QTsqhhgmwE418BcOm61zbboWSP7BbqwIBB1WluZMxW0">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164805">
+<div class="form-actions form-wrapper" id="edit-actions--15"><input type="submit" id="edit-submit--16" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--14" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--14">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--14" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164805" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--14" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-806"></a>
+<article class="comment comment-by-anonymous odd clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/806#comment-806" rel="bookmark">Re SMS</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">Andrew (not verified)</span> on <time datetime="2014-03-01T01:12:00Z" pubdate="pubdate"><span class="date-time">Sat, 2014-03-01 01:12</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">Hi, thanks for replying! By putting the dongle in 3G mode I assume. Because I can get it into modem mode using usb modeswitch, like you have written, but then gammu will not work because there is nothing in the ttyUSB ports? Thanks again.</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--15" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--15">Your name </label>
+ <input type="text" id="edit-name--15" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--15">Subject </label>
+ <input type="text" id="edit-subject--15" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--15"><div id="comment-body-add-more-wrapper--15"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--15">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--15" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-yOLrgFpqY9De63MJyG2UWVL4PgaYIZSWOvlre1SjF3c">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164806">
+<div class="form-actions form-wrapper" id="edit-actions--16"><input type="submit" id="edit-submit--17" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--15" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--15">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--15" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164806" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--15" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-807"></a>
+<article class="comment comment-by-node-author even clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/807#comment-807" rel="bookmark">SMS</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">The Fan Club</span> on <time datetime="2014-03-01T10:40:35Z" pubdate="pubdate"><span class="date-time">Sat, 2014-03-01 10:40</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">Hi Andrew, this article is not about SMS. Try and replace /dev/ttyUSB device with /dev/gsmmodem. </div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--16" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--16">Your name </label>
+ <input type="text" id="edit-name--16" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--16">Subject </label>
+ <input type="text" id="edit-subject--16" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--16"><div id="comment-body-add-more-wrapper--16"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--16">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--16" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-PCipV3lWVjaI0YWOVfN1M74KyfdDI2exPt0-kaUZ1Tc">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164807">
+<div class="form-actions form-wrapper" id="edit-actions--17"><input type="submit" id="edit-submit--18" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--16" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--16">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--16" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164807" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--16" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-812"></a>
+<article class="comment comment-by-anonymous odd clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/812#comment-812" rel="bookmark">Step #2</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">Octopus (not verified)</span> on <time datetime="2014-03-07T20:49:53Z" pubdate="pubdate"><span class="date-time">Fri, 2014-03-07 20:49</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">Can you please clarify what you do in step 2. lsusb gives you two different numbers. For me I get the same numbers. What is the difference? All you do is a cold reboot vs a warm reboot? </div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--17" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--17">Your name </label>
+ <input type="text" id="edit-name--17" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--17">Subject </label>
+ <input type="text" id="edit-subject--17" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--17"><div id="comment-body-add-more-wrapper--17"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--17">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--17" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-leO5x788VTxpBPkNUBUQs8gi9yFQDZi1Js7Poq71iC0">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164812">
+<div class="form-actions form-wrapper" id="edit-actions--18"><input type="submit" id="edit-submit--19" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--17" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--17">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--17" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164812" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--17" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-813"></a>
+<article class="comment comment-by-node-author even clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/813#comment-813" rel="bookmark">Step #2</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">The Fan Club</span> on <time datetime="2014-03-07T22:10:41Z" pubdate="pubdate"><span class="date-time">Fri, 2014-03-07 22:10</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">Hi Ocopus, it is confusing. Most modems have two modes, the USB mode and a modem mode. The modem is detected differently if plugged in on a soft reboot vs hard reboot. Try booting the Pi without the modem plugged in. Then plug it in, wait a 10 seconds and the do the lsusb. Usually this is the usb mode. Then with reboot with sudo reboot, this will make sure the modem is powered on the reboot and usb modeswitch should do the switching to modem mode. Check the numbers again now with lsusb. </div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--18" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--18">Your name </label>
+ <input type="text" id="edit-name--18" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--18">Subject </label>
+ <input type="text" id="edit-subject--18" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--18"><div id="comment-body-add-more-wrapper--18"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--18">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--18" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-9u4vOZnCrICidrvHnHVM9tviD1GzmGbbkn-9OUbSwAY">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164813">
+<div class="form-actions form-wrapper" id="edit-actions--19"><input type="submit" id="edit-submit--20" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--18" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--18">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--18" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164813" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--18" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-851"></a>
+<article class="comment comment-by-anonymous odd clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/851#comment-851" rel="bookmark">Huawei E303c supported on Raspberrry Pi?</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">Jonty (not verified)</span> on <time datetime="2014-03-31T20:24:28Z" pubdate="pubdate"><span class="date-time">Mon, 2014-03-31 20:24</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">Can I setup the Huawei E303c as a 3G usb modem on Raspberry pi using usb_modeswitch and wvdial??</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--19" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--19">Your name </label>
+ <input type="text" id="edit-name--19" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--19">Subject </label>
+ <input type="text" id="edit-subject--19" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--19"><div id="comment-body-add-more-wrapper--19"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--19">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--19" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-iADqwJmj2-5ysDSFB2i9bmVOUgIAQoNxUbhy-Jl5zu4">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164851">
+<div class="form-actions form-wrapper" id="edit-actions--20"><input type="submit" id="edit-submit--21" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--19" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--19">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--19" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164851" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--19" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-853"></a>
+<article class="comment comment-by-anonymous even clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/853#comment-853" rel="bookmark">Sierra Wireless Modem</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">Sashmo (not verified)</span> on <time datetime="2014-04-01T19:24:47Z" pubdate="pubdate"><span class="date-time">Tue, 2014-04-01 19:24</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">I am not able to find the codes from your file for 1199:68a3
+
+Will something else work? or do I have to find the codes from the Sierra driver pack?</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--20" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--20">Your name </label>
+ <input type="text" id="edit-name--20" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--20">Subject </label>
+ <input type="text" id="edit-subject--20" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--20"><div id="comment-body-add-more-wrapper--20"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--20">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--20" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-gPA3LBs7uMf0M2CkjZXhvw_w1dndYWdEYKuA-A5D7SU">
+<input type="hidden" name="form_id" value="comment_form_node_howto_164853">
+<div class="form-actions form-wrapper" id="edit-actions--21"><input type="submit" id="edit-submit--22" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--20" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--20">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--20" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_164853" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--20" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+<a id="comment-1086"></a>
+<article class="comment comment-by-anonymous odd clearfix js-hidden">
+
+  
+  
+  <header class="comment-header">
+  
+    
+          <h3 class="comment-title"><a href="https://www.thefanclub.co.za/comment/1086#comment-1086" rel="bookmark">Thank</a></h3>
+    
+        
+    <p class="submitted">Submitted by <span class="username">cesar (not verified)</span> on <time datetime="2015-01-26T22:34:05Z" pubdate="pubdate"><span class="date-time">Mon, 2015-01-26 22:34</span></time></p>
+
+  </header>
+
+  
+  <div class="comment-content">
+    <div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even">Work perfect!!!</div></div></div><form class="comment-form" action="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" method="post" id="comment-form--21" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-name">
+  <label for="edit-name--21">Your name </label>
+ <input type="text" id="edit-name--21" name="name" value="" size="30" maxlength="60" class="form-text">
+</div>
+<div class="form-item form-type-textfield form-item-subject">
+  <label for="edit-subject--21">Subject </label>
+ <input type="text" id="edit-subject--21" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body--21"><div id="comment-body-add-more-wrapper--21"><div class="form-item form-type-textarea form-item-comment-body-und-0-value">
+  <label for="edit-comment-body-und-0-value--21">Comment <span class="form-required" title="This field is required.">*</span></label>
+ <div class="form-textarea-wrapper resizable"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value--21" name="comment_body[und][0][value]" cols="60" rows="5"></textarea></div>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-IKzbWCumXkKeLP8nRQPDF22luaHyw9q_OQmQOZlkMN8">
+<input type="hidden" name="form_id" value="comment_form_node_howto_1641086">
+<div class="form-actions form-wrapper" id="edit-actions--22"><input type="submit" id="edit-submit--23" name="op" value="Save" class="form-submit"><input class="ideal-comment-preview-button form-wrapper form-submit ajax-processed" type="submit" id="edit-preview--21" name="op" value="Preview"></div><div class="comment-textfield"><div class="form-item form-type-textfield form-item-comment">
+  <label for="edit-comment--21">Leave this field blank </label>
+ <input autocomplete="off" type="text" id="edit-comment--21" name="comment" value="" size="20" maxlength="128" class="form-text">
+</div>
+</div><div id="replace_preview_comment_form_node_howto_1641086" class="ideal-comment-preview-area comment-preview"><div id="edit-comment-preview--21" class="form-item form-type-item">
+  
+</div>
+</div></div></form>
+    
+  </div>
+
+  
+</article>
+
+  
+<div class="show-all-comments jquery-once-1-processed">Show all comments</div><div class="show-all-comments less hidden jquery-once-1-processed">Show less comments</div></section>
+
+</article>
+
+  </div>              </div>
+            
+            
+          </section>
+
+          <div class="region region-content-aside"><div class="region-inner clearfix"><section id="block-views-related-content-block" class="block block-views odd first last block-count-4 block-region-content-aside block-related-content-block"><div class="block-inner clearfix">  
+      <h2 class="block-title">related content</h2>
+  
+  <div class="block-content content"><div class="view view-related-content view-id-related_content view-display-id-block view-dom-id-6168382e4d853267e287122bed50b2b9">
+        
+  
+  
+      <div class="view-content">
+      <table class="views-view-grid cols-1">
+  
+  <tbody>
+          <tr class="row-1 row-first">
+                  <td class="col-1 col-first">
+              
+  <div class="views-field views-field-field-image-howto">        <div class="field-content"><a href="https://www.thefanclub.co.za/how-to/how-auto-connect-ubuntu-1204-gsm-mobile-broadband-connection-on-boot-startup-service"><img class="image-style-icon-36x36" src="./3g-sms_files/cof_orange_hex.png" width="36" height="36" alt=""></a></div>  </div>  
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://www.thefanclub.co.za/how-to/how-auto-connect-ubuntu-1204-gsm-mobile-broadband-connection-on-boot-startup-service">How to auto connect Ubuntu 12.04 USB GSM Mobile Broadband Connection on Boot as startup service without user login using Network Manager CLi </a></span>  </div>          </td>
+              </tr>
+          <tr class="row-2">
+                  <td class="col-1 col-first">
+              
+  <div class="views-field views-field-field-image-howto">        <div class="field-content"><a href="https://www.thefanclub.co.za/how-to/free-ip-ddns-service-duck-dns-setup-script-linux-and-osx"><img class="image-style-icon-36x36" src="./3g-sms_files/ducky_icon.png" width="36" height="36" alt=""></a></div>  </div>  
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://www.thefanclub.co.za/how-to/free-ip-ddns-service-duck-dns-setup-script-linux-and-osx">Free IP DDNS service Duck DNS setup script for Linux and OSX </a></span>  </div>          </td>
+              </tr>
+          <tr class="row-3">
+                  <td class="col-1 col-first">
+              
+  <div class="views-field views-field-field-image-howto">        <div class="field-content"><a href="https://www.thefanclub.co.za/how-to/how-add-wireless-lan-adaptor-static-ip-ubuntu-auto-connects-startup"><img class="image-style-icon-36x36" src="./3g-sms_files/cof_orange_hex_5_0.png" width="36" height="36" alt=""></a></div>  </div>  
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://www.thefanclub.co.za/how-to/how-add-wireless-lan-adaptor-static-ip-ubuntu-auto-connects-startup">How to add a Wireless LAN adaptor static IP to Ubuntu that auto connects at startup</a></span>  </div>          </td>
+              </tr>
+          <tr class="row-4">
+                  <td class="col-1 col-first">
+              
+  <div class="views-field views-field-field-image-howto">        <div class="field-content"><a href="https://www.thefanclub.co.za/how-to/how-install-open-visual-traceroute-ubuntu"><img class="image-style-icon-36x36" src="./3g-sms_files/internet.png" width="36" height="36" alt=""></a></div>  </div>  
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://www.thefanclub.co.za/how-to/how-install-open-visual-traceroute-ubuntu">How to install Open Visual Traceroute on Ubuntu</a></span>  </div>          </td>
+              </tr>
+          <tr class="row-5 row-last">
+                  <td class="col-1 col-first">
+              
+  <div class="views-field views-field-field-image-howto">        <div class="field-content"><a href="https://www.thefanclub.co.za/how-to/dd-utility-write-and-backup-operating-system-img-and-iso-files-memory-card-or-disk"><img class="image-style-icon-36x36" src="./3g-sms_files/memcard-300.png" width="36" height="36" alt=""></a></div>  </div>  
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://www.thefanclub.co.za/how-to/dd-utility-write-and-backup-operating-system-img-and-iso-files-memory-card-or-disk">dd Utility - Write and Backup Operating System IMG and ISO files on Memory Card or Disk</a></span>  </div>          </td>
+              </tr>
+      </tbody>
+</table>
+    </div>
+  
+  
+  
+      
+<div class="more-link">
+  <a href="https://www.thefanclub.co.za/experiments">
+    more  </a>
+</div>
+  
+  
+  
+</div></div>
+  </div></section></div></div>
+        </div>
+      </div>
+
+            <div class="region region-sidebar-second sidebar"><div class="region-inner clearfix"><div id="block-block-20" class="block block-block no-title odd first block-count-5 block-region-sidebar-second block-20"><div class="block-inner clearfix">  
+  
+  <div class="block-content content no-title"><p><a href="https://www.thefanclub.co.za/overgrive"><img alt="" title="overGrive - Linux Google Drive Desktop Client" src="./3g-sms_files/overgrive-logo.png"></a></p>
+</div>
+  </div></div><section id="block-views-clone-of-showcase-block-1" class="block block-views even block-count-6 block-region-sidebar-second block-clone-of-showcase-block-1"><div class="block-inner clearfix">  
+      <h2 class="block-title">popular now</h2>
+  
+  <div class="block-content content"><div class="view view-clone-of-showcase view-id-clone_of_showcase view-display-id-block_1 view-dom-id-b8e2ffab67cebaf41de32b482e7efb26">
+        
+  
+  
+      <div class="view-content">
+      <table class="views-view-grid cols-1">
+  
+  <tbody>
+          <tr class="row-1 row-first">
+                  <td class="col-1 col-first">
+              
+  <div class="views-field views-field-field-image-howto">        <div class="field-content"><a href="https://www.thefanclub.co.za/how-to/how-install-blackmagic-design-davinci-resolve-ubuntu"><img class="image-style-icon-36x36" src="./3g-sms_files/resolve.png" width="36" height="36" alt=""></a></div>  </div>  
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://www.thefanclub.co.za/how-to/how-install-blackmagic-design-davinci-resolve-ubuntu">How to install Blackmagic Design DaVinci Resolve on Ubuntu</a></span>  </div>          </td>
+              </tr>
+          <tr class="row-2">
+                  <td class="col-1 col-first">
+              
+  <div class="views-field views-field-field-image-howto">        <div class="field-content"><a href="https://www.thefanclub.co.za/how-to/ubuntu-after-install"><img class="image-style-icon-36x36" src="./3g-sms_files/ubuntu-after-install.png" width="36" height="36" alt=""></a></div>  </div>  
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://www.thefanclub.co.za/how-to/ubuntu-after-install">Ubuntu After Install</a></span>  </div>          </td>
+              </tr>
+          <tr class="row-3">
+                  <td class="col-1 col-first">
+              
+  <div class="views-field views-field-field-image-howto">        <div class="field-content"><a href="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" class="active"><img class="image-style-icon-36x36" src="./3g-sms_files/debian(1).png" width="36" height="36" alt=""></a></div>  </div>  
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://www.thefanclub.co.za/how-to/how-setup-usb-3g-modem-raspberry-pi-using-usbmodeswitch-and-wvdial" class="active">How to setup a USB 3G Modem on Raspberry PI using usb_modeswitch and wvdial</a></span>  </div>          </td>
+              </tr>
+          <tr class="row-4">
+                  <td class="col-1 col-first">
+              
+  <div class="views-field views-field-field-image-howto">        <div class="field-content"><a href="https://www.thefanclub.co.za/how-to/how-install-unicenta-pos-ubuntu"><img class="image-style-icon-36x36" src="./3g-sms_files/unicentaopos.png" width="36" height="36" alt=""></a></div>  </div>  
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://www.thefanclub.co.za/how-to/how-install-unicenta-pos-ubuntu">How to install uniCenta POS on Ubuntu  </a></span>  </div>          </td>
+              </tr>
+          <tr class="row-5 row-last">
+                  <td class="col-1 col-first">
+              
+  <div class="views-field views-field-field-image-howto">        <div class="field-content"><a href="https://www.thefanclub.co.za/how-to/how-ubuntu-1204-touchscreen-calibration"><img class="image-style-icon-36x36" src="./3g-sms_files/cof_orange_hex_0.png" width="36" height="36" alt=""></a></div>  </div>  
+  <div class="views-field views-field-title">        <span class="field-content"><a href="https://www.thefanclub.co.za/how-to/how-ubuntu-1204-touchscreen-calibration">How to - Ubuntu 12.04 Touchscreen calibration </a></span>  </div>          </td>
+              </tr>
+      </tbody>
+</table>
+    </div>
+  
+  
+  
+      
+<div class="more-link">
+  <a href="https://www.thefanclub.co.za/experiments/recent">
+    more  </a>
+</div>
+  
+  
+  
+</div></div>
+  </div></section><div id="block-block-26" class="block block-block no-title odd block-count-7 block-region-sidebar-second block-26"><div class="block-inner clearfix">  
+  
+  <div class="block-content content no-title"><p><a href="https://www.thefanclub.co.za/backstretch-for-wordpress"><img alt="" title="Backstretch for Wordpress Plugin" src="./3g-sms_files/backstretch-banner-600.png"></a></p>
+</div>
+  </div></div><div id="block-block-17" class="block block-block no-title even block-count-8 block-region-sidebar-second block-17"><div class="block-inner clearfix">  
+  
+  <div class="block-content content no-title"><div style="background: #eee; padding: 5px 0; border-radius: 12px; border: 1px solid #ddd;">
+<p class="rtecenter" style="margin:0px;"><a href="bitcoin:1GB1Ys6SSHtZEUn8BuCTTJvrbDnuFbzdBM"><img alt="" src="./3g-sms_files/Bitcoin-Donate.png"></a></p>
+<p class="rtecenter" style="margin:0px; color:#666;"><span style="font-size:12px;"><a href="bitcoin:1GB1Ys6SSHtZEUn8BuCTTJvrbDnuFbzdBM" style="margin:0px; color:#666;">1GB1Ys6SSHtZEUn8BuCTTJvrbDnuFbzdBM</a></span></p>
+</div>
+</div>
+  </div></div><div id="block-block-19" class="block block-block no-title odd last block-count-9 block-region-sidebar-second block-19"><div class="block-inner clearfix">  
+  
+  <div class="block-content content no-title"><div style="background: #eee; padding: 5px 0; border-radius: 12px; border: 1px solid #ddd;">
+<p class="rtecenter" style="margin:0px;"><a href="litecoin:1GB1Ys6SSHtZEUn8BuCTTJvrbDnuFbzdBM"><img alt="" src="./3g-sms_files/Litecoin-Donate.png"></a></p>
+<p class="rtecenter" style="margin:0px; color:#666;"><span style="font-size:12px;"><a href="litecoin:LNFxFGg5LTdgCoPk6kdYA3wKAVTboYbdPj" style="margin:0px; color:#666;">LNFxFGg5LTdgCoPk6kdYA3wKAVTboYbdPj</a></span></p>
+</div>
+</div>
+  </div></div></div></div>      
+    </div>
+  </div>
+
+      <footer role="contentinfo">
+            <div class="region region-footer"><div class="region-inner clearfix"><div id="block-block-4" class="block block-block no-title odd first block-count-10 block-region-footer block-4"><div class="block-inner clearfix">  
+  
+  <div class="block-content content no-title"><div style="float:right;padding-bottom:20px"><a href="http://www.ubuntu.com/" target="_blank"><img src="./3g-sms_files/powered-by-ubuntu.png"></a></div><b>The Fan Club © 2001-2018. All Rights Reserved.</b><br><br>The material on this site may not be reproduced, distributed, transmitted, cached or otherwise used, except with the prior written permission of The Fan Club.</div>
+  </div></div><nav id="block-superfish-5" class="block block-superfish no-title even block-count-11 block-region-footer block-5"><div class="block-inner clearfix">  
+  
+  <div class="block-content content clearfix no-title"><ul id="superfish-5" class="menu sf-menu sf-menu-bottom-menus sf-horizontal sf-style-space sf-total-items-5 sf-parent-items-0 sf-single-items-5"><li id="menu-5993-5" class="first odd sf-item-1 sf-depth-1 sf-no-children"><a href="https://www.thefanclub.co.za/content/about-us" title="About The Fan Club" class="sf-depth-1">about us</a></li><li id="menu-5994-5" class="middle even sf-item-2 sf-depth-1 sf-no-children"><a href="https://www.thefanclub.co.za/privacy-policy" title="The Fan Club Privacy Policy" class="sf-depth-1">privacy policy</a></li><li id="menu-5997-5" class="middle odd sf-item-3 sf-depth-1 sf-no-children"><a href="https://www.thefanclub.co.za/terms-and-conditions" title="Website Terms and Conditions of Use" class="sf-depth-1">terms &amp; conditions</a></li><li id="menu-5995-5" class="middle even sf-item-4 sf-depth-1 sf-no-children"><a href="https://www.thefanclub.co.za/sitemap.xml" title="Sitemap for The Fan Club" class="sf-depth-1">sitemap</a></li><li id="menu-5996-5" class="last odd sf-item-5 sf-depth-1 sf-no-children"><a href="https://www.thefanclub.co.za/contact" title="Contact The Fan Club" class="sf-depth-1">contact</a></li></ul></div>
+  </div></nav><div id="block-views-wallpaper-block-1" class="block block-views no-title odd last block-count-12 block-region-footer block-wallpaper-block-1"><div class="block-inner clearfix">  
+  
+  <div class="block-content content no-title"><div class="view view-wallpaper view-id-wallpaper view-display-id-block_1 view-dom-id-6be577145426602b71846c4b06d2fd9c">
+        
+  
+  
+      <div class="view-content">
+        <div class="views-row views-row-1 views-row-odd views-row-first views-row-last">
+      </div>
+    </div>
+  
+  
+  
+  
+  
+  
+</div></div>
+  </div></div></div></div>          </footer>
+  
+</div><!-- //End #page, .container -->
+
+  
+
+<iframe frameborder="0" scrolling="no" style="background-color: transparent; border: 0px; display: none;" src="./3g-sms_files/saved_resource.html"></iframe><div id="GOOGLE_INPUT_CHEXT_FLAG" style="display: none;" input="" input_stat="{&quot;tlang&quot;:true,&quot;tsbc&quot;:true,&quot;pun&quot;:true,&quot;mk&quot;:true,&quot;ss&quot;:true}"></div></body></html>

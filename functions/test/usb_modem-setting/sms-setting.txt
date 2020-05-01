@@ -1,0 +1,129 @@
+https://hristoborisov.com/index.php/projects/turning-the-raspberry-pi-into-a-sms-center-using-python/#Connecting_the_3gModem
+
+
+
+# Huawei E353s-2
+
+TargetVendor= 0x12d1
+
+TargetProduct=0x1506
+
+
+MessageContent="55534243123456780000000000000011062000000100000000000000000000"
+NoDriverLoading=1
+
+====================
+
+
+Zte K3765-Z & Raspian November 2017 & Internet and SMS
+Quote
+Wed Feb 07, 2018 8:25 am
+
+Hello ,
+
+I'm trying to use my vodafone ZTE K3765-Z with my raspberry pi 3 to give it internet connection. When i plug my dongle i get a wwan0 , but it remains 
+the message "no ap's found".
+
+I installed
+
+sudo wget "http://zool33.uni-graz.at/petz/umtskeep ... per.tar.gz"
+sudo tar -xzvf umtskeeper.tar.gz
+sudo chmod +x umtskeeper
+
+
+Now i set up
+'
+root@raspberrypi:/etc# lsusb
+Bus 001 Device 004: ID 1c4f:0002 SiGma Micro Keyboard TRACER Gamma Ivory
+Bus 001 Device 018: ID 19d2:2002 ZTE WCDMA Technologies MSM 
+Bus 001 Device 005: ID 045e:0797 Microsoft Corp. Optical Mouse 200
+Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp. SMSC9512/9514 Fast Ethernet Adapter
+'
+tried 
+' sudo su usb_modem -v 0x19d2 -p 0x2002 -d '
+
+
+added lines in /etc/usb_modeswitch.conf 
+'
+DefaultVendor=0x19d2
+DefaultProduct=0x2000
+
+TargetVendor= 0x19d2
+TargetProduct=0x2002
+
+
+MessageContent="55534243123456702000000080000c85010101180101010101000000000000"
+'
+and 
+modified /etc/wvdial.conf
+
+'[Dialer Defaults]
+Init1 = ATZ
+Init3 = AT+CGDCONT=1,"IP","internet.wind"
+Stupid Mode = 1
+Modem Type = Analog Modem
+Stupid mode = 1
+ISDN = 0
+Phone = *99#
+Modem = /dev/gsmmodem
+Username = { }
+Password = { }
+Baud = 460800
+New PPPD = yes
+'
+I have install gammu
+
+sudo gammu-config
+sudo gammu --identify
+Device : /dev/gsmmodem
+Manufacturer : ZTE
+Model : unknown (K3765-Z)
+Firmware : BD_VDFP673A1V1.0.0B04
+IMEI : 3536791XXXXXXXXX7
+SIM IMSI : 22283XXXXX4
+root@raspberrypi:/etc# echo "test" | sudo gammu sendsms TEXT 00*********7
+
+and it works only if the wvdial is offline.
+
+Is there some way to have both internet and r/w sms ?
+
+The RASPBIAN is the desktop based on Debian Stretch Version:November 2017 Release date:2017-11-29.
+
+====================================
+Huawei E367
+This guide is for Huawei Mobile Broadband E367 HSPA+ USB Rotator. This method should also work for many other huawei 3G adapters (E175 & E353 & E363 for example?).
+
+-Kernel
+usbserial needs to be built to your kernel or as a module:
+
+root #modprobe usbserial
+Install
+emerge --ask sys-apps/usb_modeswitch
+Configure
+/etc/usb_modeswitch.conf
+# Huawei E367
+DefaultVendor=0x12d1
+DefaultProduct=0x1446
+
+TargetVendor=0x12d1
+TargetProductList="1001,1406,140b,140c,1412,141b,14ac,1506"
+
+CheckSuccess=20
+
+MessageEndpoint=0x01
+MessageContent="55534243123456780000000000000011062000000100000000000000000000"
+=======================
+Hi,
+
+On RHEL 6
+I have a new Huawei 12d1:14fe, when inserted it switches to 12d1:151d
+To get it working on version 1.2.6 (compiled from source) I had to change the file 12d1:14fe by removing
+
+TargetProduct=0x1506
+to
+TargetProductList="1506,151d"
+
+and it worked right away :)
+
+Thank you guys, and keep up the good work.
+
